@@ -15,14 +15,14 @@ public class TimeEntryController {
         this.timeEntryRepository = timeEntryRepository;
     }
     @PostMapping ("/time-entries")
-    public ResponseEntity<TimeEntry> create(TimeEntry timeEntryToCreate) {
+    public ResponseEntity<TimeEntry> create(@RequestBody TimeEntry timeEntryToCreate) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(timeEntryRepository.create(timeEntryToCreate));
     }
 
-    @GetMapping("/time-entries/")
-    public ResponseEntity<TimeEntry> read(long timeEntryId) {
+    @GetMapping("/time-entries/{timeEntryId}")
+    public ResponseEntity<TimeEntry> read(@PathVariable long timeEntryId) {
         TimeEntry timeEntryFound = timeEntryRepository.find(timeEntryId);
         if(timeEntryFound == null){
             return ResponseEntity
@@ -35,6 +35,7 @@ public class TimeEntryController {
         }
     }
 
+    @GetMapping("/time-entries")
     public ResponseEntity<List<TimeEntry>> list() {
         List<TimeEntry> listTimeEntry= timeEntryRepository.list();
         return ResponseEntity
@@ -43,8 +44,8 @@ public class TimeEntryController {
 
     }
 
-    @PutMapping("/time-entries/")
-    public ResponseEntity<TimeEntry> update(long timeEntryId, TimeEntry timeEntryToUpdate) {
+    @PutMapping("/time-entries/{id}")
+    public ResponseEntity<TimeEntry> update(@PathVariable("id")  long timeEntryId,@RequestBody TimeEntry timeEntryToUpdate) {
         TimeEntry timeEntryFound = timeEntryRepository.update(timeEntryId,timeEntryToUpdate);
         if(timeEntryFound == null){
             return ResponseEntity
@@ -56,8 +57,8 @@ public class TimeEntryController {
                     .body(timeEntryFound);
         }
     }
-    @DeleteMapping("/time-entries/")
-    public ResponseEntity<Void> delete(long timeEntryId) {
+    @DeleteMapping("/time-entries/{timeEntryId}")
+    public ResponseEntity<Void> delete(@PathVariable long timeEntryId) {
         timeEntryRepository.delete(timeEntryId);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT).build();
